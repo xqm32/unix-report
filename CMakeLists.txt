@@ -4,6 +4,6 @@ project(PROJECT_NAME)
 include_directories(src)
 aux_source_directory(src SRC)
 
-add_compile_options(-std=c17 -g)
+add_compile_options(-std=c17 -O3)
 add_executable(main ${SRC})
 target_link_libraries(main m)
