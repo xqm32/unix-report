@@ -16,7 +16,7 @@ extern double *breakpoints;
 
 int begin(const char *);
 int end();
-double fp();
+double fp(double);
 double rf_sort();
 double rf_a3();
 
