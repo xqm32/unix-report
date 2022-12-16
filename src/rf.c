@@ -1,5 +1,7 @@
 #include "rf.h"
 
+double precision;
+
 int m;
 double a, d;
 double *b, *c;
@@ -20,6 +22,10 @@ int begin(const char *filename) {
     // 不进行错误检查
     FILE *file = fopen(filename, "r");
     {
+        // precision
+        fscanf(file, "%lf", &precision);
+        printf("precision: %lf\n", precision);
+
         // m, a, d
         fscanf(file, "%d", &m);
         fscanf(file, "%lf", &a);
@@ -63,7 +69,7 @@ double fp(double x) {
 double rf_sort() {
     double *bps = (double *)malloc(sizeof(double) * m);
     // 取下确界
-    for (int i = 0; i < m; ++i) bps[i] = breakpoints[i] - PRECISION;
+    for (int i = 0; i < m; ++i) bps[i] = breakpoints[i] - precision;
     double answer = bps[m - 1];
 
     {
@@ -71,7 +77,7 @@ double rf_sort() {
         for (int i = 0; i < m - 1; ++i)
             if (fp(bps[i]) * fp(bps[i + 1]) < 0) {
                 double root = bps[i + 1] - fp(bps[i + 1]) / a;
-                if (fabs(fp(root)) < PRECISION)
+                if (fabs(fp(root)) < precision)
                     answer = root;
                 else
                     answer = bps[i];
@@ -88,7 +94,7 @@ double rf_sort() {
 double rf_a3() {
     double *bps = (double *)malloc(sizeof(double) * m);
     // 取下确界
-    for (int i = 0; i < m; ++i) bps[i] = breakpoints[i] - PRECISION;
+    for (int i = 0; i < m; ++i) bps[i] = breakpoints[i] - precision;
     double answer = bps[m - 1], g = 0;
 
     srand(time(NULL));

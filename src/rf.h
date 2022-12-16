@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define PRECISION 1e-4
+extern double precision;
 
 extern int m;
 extern double a, d;
