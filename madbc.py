@@ -7,7 +7,7 @@ if __name__ == "__main__":
 
     p = 1e-8
     m = int(sys.argv[1])
-    print(f"madbc.py: m={m}")
+    # print(f"madbc.py: m={m}")
     a = abs(np.random.normal(0, 1))
     d = np.random.normal(0, 1)
     b = list(np.random.normal(0, 1, m))

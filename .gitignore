@@ -71,3 +71,5 @@ main
 madbc.txt
 a3
 sort
+a3.*
+sort.*
