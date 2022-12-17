@@ -82,18 +82,30 @@ double rf_sort() {
     // 取下确界
     for (int i = 0; i < m; ++i) bps[i] = breakpoints[i] - precision;
     double answer = bps[m - 1];
+    int start = 0, end = m - 1, mid;
 
     {
         qsort(bps, m, sizeof(double), cmp);
-        for (int i = 0; i < m - 1; ++i)
-            if (fp(bps[i]) * fp(bps[i + 1]) < 0) {
-                double root = bps[i + 1] - fp(bps[i + 1]) / a;
-                if (fabs(fp(root)) < precision)
-                    answer = root;
-                else
-                    answer = bps[i];
-                break;
+        for (;;) {
+            mid = (start + end) / 2;
+            if (fp(bps[start]) * fp(bps[mid]) < 0) {
+                if (mid - start == 1) {
+                    double root = bps[start] - fp(bps[start]) / a;
+                    if (fabs(fp(root) < precision))
+                        answer = root;
+                    else
+                        answer = bps[start];
+                    break;
+                }
+                end = mid;
+            } else {
+                if (end - mid == 1) {
+                    answer = bps[mid];
+                    break;
+                }
+                start = mid;
             }
+        }
     }
 
     free(bps);
