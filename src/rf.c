@@ -1,5 +1,11 @@
 #include "rf.h"
 
+#include <math.h>
+#include <memory.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 double precision;
 
 int m;
@@ -18,41 +24,46 @@ static int cmp(const void *a, const void *b) {
         return 1;
 }
 
-int begin(const char *filename) {
-    // 不进行错误检查
+void begin(const char *filename) {
     FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("error: incorrect file %s\n", filename);
+        exit(1);
+    }
     {
-        // precision
-        fscanf(file, "%lf", &precision);
-        printf("precision: %lf\n", precision);
-
         // m, a, d
-        fscanf(file, "%d", &m);
-        fscanf(file, "%lf", &a);
-        fscanf(file, "%lf", &d);
+        int n = 0;
+        {
+            n += fscanf(file, "%lf", &precision);
+            n += fscanf(file, "%d", &m);
+            n += fscanf(file, "%lf", &a);
+            n += fscanf(file, "%lf", &d);
 
-        // b, c
-        b = (double *)malloc(sizeof(double) * m);
-        c = (double *)malloc(sizeof(double) * m);
-        for (int i = 0; i < m; ++i) fscanf(file, "%lf", &b[i]);
-        for (int i = 0; i < m; ++i) fscanf(file, "%lf", &c[i]);
+            // b, c
+            b = (double *)malloc(sizeof(double) * m);
+            c = (double *)malloc(sizeof(double) * m);
+            for (int i = 0; i < m; ++i) n += fscanf(file, "%lf", &b[i]);
+            for (int i = 0; i < m; ++i) n += fscanf(file, "%lf", &c[i]);
+        }
+        if (n != 2 * m + 4) {
+            printf("error: incorrect parameter\n");
+            exit(1);
+        }
 
         // breakpoints
         breakpoints = (double *)malloc(sizeof(double) * m);
         for (int i = 0; i < m; ++i) breakpoints[i] = -c[i] / b[i];
     }
     fclose(file);
-    return 0;
 }
 
-int end() {
+void end() {
     // b, c
     free(b);
     free(c);
 
     // breakpoints
     free(breakpoints);
-    return 0;
 }
 
 // 函数 fp() 必须位于函数 begin(), end() 之间
