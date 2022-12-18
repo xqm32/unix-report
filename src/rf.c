@@ -88,22 +88,17 @@ double rf_sort() {
         qsort(bps, m, sizeof(double), cmp);
         for (;;) {
             mid = (start + end) / 2;
-            if (fp(bps[start]) * fp(bps[mid]) < 0) {
-                if (mid - start == 1) {
-                    double root = bps[start] - fp(bps[start]) / a;
-                    if (fabs(fp(root) < precision))
-                        answer = root;
-                    else
-                        answer = bps[start];
-                    break;
-                }
+            if (fp(bps[start]) * fp(bps[mid]) < 0)
                 end = mid;
-            } else {
-                if (end - mid == 1) {
-                    answer = bps[mid];
-                    break;
-                }
+            else 
                 start = mid;
+            
+            if (end - start == 1) {
+                double root = bps[end] - fp(bps[end]) / a;
+                if (fabs(fp(root)) < precision)
+                    return root;
+                else
+                    return bps[start];
             }
         }
     }
